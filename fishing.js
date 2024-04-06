@@ -48,8 +48,6 @@ class Tool {
 
 }
 
-
-
 class Hook extends Tool{
 
 
@@ -79,11 +77,10 @@ class Spear extends Tool{
 }
 
 class FishStocks {
-    
 
-    nodes = [];
-
-    generateNode(old_price){
+    //Create node with base price
+    nodes = [10];
+    generatePrice(){
         volatility=10;
         rnd = Math.Random(); // generate number, 0 <= x < 1.0
         change_percent = 2;
@@ -92,37 +89,37 @@ class FishStocks {
             }
         change_amount = old_price * change_percent;
         new_price = old_price + change_amount;
-        this.nodes.push(new_price);
+    
+        return new_price;
     }
 
     constructor(numNodes,old_price) {
         this.numNodes = numNodes;
         for (let i=0; i<numNodes; i++) {
-           // generateNode(old_price);
+           generateNode(old_price);
         }
     }
 
-    updateStock(old_price) {
-        generateNode(old_price);
-        shift(nodes);
+    generateNodes() {
+        for (let i = 0; i < this.numNodes; i++) {
+            nodes.push = this.generateNodes();
+        }
     }
     
     draw() {
-        //for (let i = 0; i < 3; i++)
-        //{
+        generateNode(old_price);
+        shift(nodes);
+        for (let i = 0; i < this.numNodes; i++)
+        {
             ctx2.fillStyle = 'blue';
             ctx2.beginPath();
-            ctx2.moveTo(10, 10);
+            ctx2.moveTo(0, stocks.height/2);
             ctx2.lineTo(100, 100);
-        //}
+            ctx2.stroke();
+        }
         
     }
 }
-
-
-
-
-
 
 //Define School
 class School {
@@ -198,8 +195,6 @@ class Fish {
     }
 }
 
-
-
 // Event listener for mouse click
 canvas.addEventListener('click', () => {
     if (!fishingRod.isDown) {
@@ -212,6 +207,7 @@ canvas.addEventListener('click', () => {
 function draw() {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx2.clearRect(0,0, stocks.width, stocks.height);
 
     // Draw Water
     ctx.fillStyle = 'rgb(159,212,253)';
