@@ -11,6 +11,8 @@ class Tool {
 }
 
 
+
+
 class Hook extends Tool{
     draw(){
         ctx.fillStyle = 'red';
