@@ -39,7 +39,11 @@ function draw() {
     // Draw fish
     ctx.fillStyle = 'blue';
     ctx.beginPath();
-    ctx.ellipse(60, 75, 50, 30, Math.PI * 0.25, 0, Math.PI * 1.5);
+    ctx.moveTo(fish.x, fish.y);
+    ctx.lineTo(fish.x-30, fish.y+12);
+    ctx.lineTo(fish.x-30, fish.y-12);
+    ctx.ellipse(fish.x, fish.y, 25, 15, 0, 0, Math.PI * 2);
+    //ctx.ellipse(fish.x, fish.y, 20, 10, 0, 0, Math.PI * 2);
     ctx.fill();
 
     // Draw hook
