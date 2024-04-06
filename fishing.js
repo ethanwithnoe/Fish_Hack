@@ -1,6 +1,8 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
+//Example commit
+
 // Define fish
 const fish = {
     x: 100,
