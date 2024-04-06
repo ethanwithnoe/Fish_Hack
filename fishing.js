@@ -1,38 +1,32 @@
-
-
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 
 //VARS
-
-fishCount = 0;
-numFishes = 10;
+fishCount = 0
 var fishes = [];
 
-//comit
-//hi
-//Example commit
-//Dog butter
+//Define School
+class School {
+    constructor(numFishes, color){
+    // Update fish position randomly
+    for (let i = 0; i < numFishes; i++) {
+        let fishX = Math.random() * canvas.width;
+        let fishY = Math.random() * canvas.height;
+        let fishSpeed = Math.random() * 2 + 1; // Random speed between 1 and 3
+        fishes.push(new Fish(fishX, fishY, fishSpeed, color));
+        }
+    }
+}
+
 // Define fish
-
-
-const fish = {
-    x: 100,
-    y: 100,
-    speed: 2,
-};
-
-
-
-const School = [];
-
 class Fish {
-    constructor(x, y, speed) {
+    constructor(x, y, speed, color) {
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.caught = false;
+        this.color = color;
     }
 
     draw() {
@@ -67,7 +61,7 @@ class Fish {
                 hook.y = 0;
                 hook.isDown = false;
                 fishCount += 1;
-                this.x = -10;
+                this.x = -50;
                 this.y = (Math.random() * (canvas.height - 50)) + 50;
             }
         }
@@ -93,19 +87,6 @@ canvas.addEventListener('click', () => {
     }
 });
 
-// Update fish position randomly
-
-
-for (let i = 0; i < numFishes; i++) {
-    let fishX = Math.random() * canvas.width;
-    let fishY = Math.random() * canvas.height;
-    let fishSpeed = Math.random() * 2 + 1; // Random speed between 1 and 3
-    fishes.push(new Fish(fishX, fishY, fishSpeed));
-    }
-
-function catchFish() {
-    return 
-}
 
 function draw() {
     // Clear canvas
@@ -128,27 +109,12 @@ function draw() {
     // Move hook
     if (hook.isDown) {
         hook.y += hook.speed;
-        if (hook.y >= fish.y) {
-            if (hook.y >= canvas.height)
-            {
-                hook.isDown = false;
-                hook.y = 0;
-            }
-            //ook.isDown = false;
-            //hook.y = canvas.height;
-            // Check if hook is close enough to the fish
-            if (Math.abs(hook.x - fish.x) < 40 && Math.abs(hook.y - fish.y) < 20) {
-                hook.y = 0;
-                hook.isDown = false;
-                fishCount += 1;
-                fish.x = -10;
-                fish.y = (Math.random() * (canvas.height - 50)) + 50;
-            }
-        }
     }
     requestAnimationFrame(draw);
 }
 
+//GAME LOGIC
 
+blue = new School(5,'red');
 
 draw();
