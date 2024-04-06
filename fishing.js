@@ -97,7 +97,7 @@ canvas.addEventListener('click', () => {
 
 for (let i = 0; i < numFishes; i++) {
     let fishX = Math.random() * canvas.width;
-    let fishY = Math.random() * canvas.height;
+    let fishY = Math.random() * (canvas.height-50);
     let fishSpeed = Math.random() * 2 + 1; // Random speed between 1 and 3
     fishes.push(new Fish(fishX, fishY, fishSpeed));
     }
