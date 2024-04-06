@@ -1,5 +1,10 @@
 const canvas = document.getElementById('canvas');
+const stocks = document.getElementById('stocks');
+
+const ctx2 = stocks.getContext('2d');
 const ctx = canvas.getContext('2d');
+//import Chart from 'chart.js/auto';
+
 
 //VARS
 var fishes = [];
@@ -7,6 +12,7 @@ var fishes = [];
 //For HTML stuff
 fishCaught = 0;
 profit = 0.5 * fishCaught;
+startPrice = Math.random()*60
 
 class Tool {
 
@@ -73,10 +79,46 @@ class Spear extends Tool{
 }
 
 class FishStocks {
+    
+
+    nodes = [];
+
+    generateNode(old_price){
+        volatility=10;
+        rnd = Math.Random(); // generate number, 0 <= x < 1.0
+        change_percent = 2;
+        if(change_percent < volatility){
+            change_percent -= (2 * volatility);
+            }
+        change_amount = old_price * change_percent;
+        new_price = old_price + change_amount;
+        this.nodes.push(new_price);
+    }
+
+    constructor(numNodes,old_price) {
+        this.numNodes = numNodes;
+        for (let i=0; i<numNodes; i++) {
+           // generateNode(old_price);
+        }
+    }
+
+    updateStock(old_price) {
+        generateNode(old_price);
+        shift(nodes);
+    }
+    
     draw() {
+        //for (let i = 0; i < 3; i++)
+        //{
+            ctx2.fillStyle = 'blue';
+            ctx2.beginPath();
+            ctx2.moveTo(10, 10);
+            ctx2.lineTo(100, 100);
+        //}
         
     }
 }
+
 
 
 
@@ -167,7 +209,6 @@ canvas.addEventListener('click', () => {
 });
 
 
-
 function draw() {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -183,12 +224,13 @@ function draw() {
         
     });
 
-    
+        fishStocks.draw();
+        
     // Draw fishingRod
         fishingRod.draw();
         fishingRod.move();
 
-
+   //setInterval(updateStock(startPrice), 1000);
 
 
     requestAnimationFrame(draw);
@@ -202,6 +244,7 @@ function draw() {
 //GAME LOGIC
 
 let fishingRod = new Spear(canvas.width/2,0,5);
+fishStocks = new FishStocks(3,60);
 blue = new School(5,'red');
 
 draw();
