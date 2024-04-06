@@ -4,3 +4,6 @@ net
     catches a lot of fish
 fish eggs
     hatches for bonus round
+
+schools of fish
+    go togther different colors and stuff
