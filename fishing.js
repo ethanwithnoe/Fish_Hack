@@ -1,11 +1,47 @@
-
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
+class Tool {
+    constructor(x, y, speed){
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.isDown = false;
+    }  
+}
+
+class Hook extends Tool{
+    draw(){
+        ctx.fillStyle = 'red';
+        ctx.fillRect(this.x - 5, this.y + 20, 10, 20);
+    }
+    move(){
+        if (fishingRod.isDown) {
+            fishingRod.y += fishingRod.speed;
+        }
+        if (fishingRod.y >= canvas.height)
+            {
+                fishingRod.isDown = false;
+                fishingRod.y = 0;
+            }
+    }
+
+}
+
+class Spear extends Tool{
+    draw(){
+        ctx.fillStyle = 'red';
+        ctx.fillRect(this.x - 5, this.y + 20, 10, 20);
+    }
+
+}
 
 //VARS
-fishCount = 0
+fishCaught = document.getElementById("fishCaught");
 var fishes = [];
+let fishingRod = new Hook(canvas.width/2,0,5);
+fishCaught = "cheese";
+fishCount = 0;
 
 //Define School
 class School {
@@ -13,7 +49,7 @@ class School {
     // Update fish position randomly
     for (let i = 0; i < numFishes; i++) {
         let fishX = Math.random() * canvas.width;
-        let fishY = Math.random() * canvas.height;
+        let fishY = (Math.random() * (canvas.height-50) + 50);
         let fishSpeed = Math.random() * 2 + 1; // Random speed between 1 and 3
         fishes.push(new Fish(fishX, fishY, fishSpeed, color));
         }
@@ -42,57 +78,53 @@ class Fish {
         }
     }
     updateFish() {
+        //Move Fish
         this.x += this.speed;
         if (this.x > canvas.width + 10) {
             this.x = -10;
             this.y = (Math.random() * (canvas.height - 50)) + 50;
         }
-        if (hook.isDown) {
-        //hook.y += hook.speed;
-        if (hook.y >= this.y) {
-            if (hook.y >= canvas.height)
-            {
-                hook.isDown = false;
-                hook.y = 0;
-            }
-            //ook.isDown = false;
-            //hook.y = canvas.height;
-            // Check if hook is close enough to the fish
-            if (Math.abs(hook.x - this.x) < 40 && Math.abs(hook.y - this.y) < 20) {
-                hook.y = 0;
-                hook.isDown = false;
-                fishCount += 1;
-                this.x = -50;
-                this.y = (Math.random() * (canvas.height - 50)) + 50;
+
+        //Check for fishingRod Collision 
+    }
+    checkFish(){
+        if (fishingRod.isDown) {
+            //fishingRod.y += fishingRod.speed;
+            if (fishingRod.y >= this.y) {
+                if (Math.abs(fishingRod.x - this.x) < 40 && Math.abs(fishingRod.y - this.y) < 20) {
+                    fishingRod.y = 0;
+                    fishingRod.isDown = false;
+                    fishCount += 1;
+                    this.x = -50;
+                    this.y = (Math.random() * (canvas.height - 50)) + 50;
+                }
             }
         }
-    }
     }
 }
 
 
-// Define hook
-const hook = {
-    x: canvas.width / 2,
-    y: 0,
-    speed: 5,
-    isDown: false,
 
-};
+// Define fishingRod
+// const fishingRod = {
+//     x: canvas.width / 2,
+//     y: 0,
+//     speed: 5,
+//     isDown: false,
+
+// };
 
 // Event listener for mouse click
 canvas.addEventListener('click', () => {
-    if (!hook.isDown) {
-        hook.isDown = true;
-        hook.y = 0;
+    if (!fishingRod.isDown) {
+        fishingRod.isDown = true;
+        fishingRod.y = 0;
     }
 });
-
 
 function draw() {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 
     // Draw Water
     ctx.fillStyle = 'rgb(159,212,253)';
@@ -101,16 +133,19 @@ function draw() {
     fishes.forEach(fish => {
         fish.draw();
         fish.updateFish();
+        fish.checkFish();
+        
     });
+    
+    // Draw fishingRod
+        fishingRod.draw();
+        fishingRod.move();
+    
 
-    // Draw hook
-    ctx.fillStyle = 'red';
-    ctx.fillRect(hook.x - 5, hook.y + 20, 10, 20);
-
-    // Move hook
-    if (hook.isDown) {
-        hook.y += hook.speed;
-    }
+    // Move fishingRod
+    // if (fishingRod.isDown) {
+    //     fishingRod.y += fishingRod.speed;
+    // }
     requestAnimationFrame(draw);
 }
 
