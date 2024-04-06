@@ -51,6 +51,26 @@ class Fish {
             this.x = -10;
             this.y = (Math.random() * (canvas.height - 50)) + 50;
         }
+        if (hook.isDown) {
+        //hook.y += hook.speed;
+        if (hook.y >= this.y) {
+            if (hook.y >= canvas.height)
+            {
+                hook.isDown = false;
+                hook.y = 0;
+            }
+            //ook.isDown = false;
+            //hook.y = canvas.height;
+            // Check if hook is close enough to the fish
+            if (Math.abs(hook.x - this.x) < 40 && Math.abs(hook.y - this.y) < 20) {
+                hook.y = 0;
+                hook.isDown = false;
+                fishCount += 1;
+                this.x = -10;
+                this.y = (Math.random() * (canvas.height - 50)) + 50;
+            }
+        }
+    }
     }
 }
 
@@ -81,6 +101,10 @@ for (let i = 0; i < numFishes; i++) {
     let fishSpeed = Math.random() * 2 + 1; // Random speed between 1 and 3
     fishes.push(new Fish(fishX, fishY, fishSpeed));
     }
+
+function catchFish() {
+    return 
+}
 
 function draw() {
     // Clear canvas
