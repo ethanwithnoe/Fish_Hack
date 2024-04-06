@@ -1,31 +1,61 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
+//VARS
+var fishes = [];
+
+//For HTML stuff
+fishCaught = 0;
+profit = 0.5 * fishCaught;
+
 class Tool {
+
+    hitboxX = 20;
+    hitboxY = 20;
+
     constructor(x, y, speed){
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.isDown = false;
-    }  
+        this.toolType = "";
+    }
+
+    move(){
+        if (this.isDown) {
+            this.y += this.speed;
+        }
+        if (this.y >= canvas.height)
+        {
+            this.isDown = false;
+            this.y = 0;
+        }
+    }
+
+    getHitboxX() {
+        return this.hitboxX;
+    }
+
+    getHitboxY() {
+        return this.hitboxY;
+    }
+
 }
 
 
 
 class Hook extends Tool{
+
+
+    
     draw(){
         ctx.fillStyle = 'red';
         ctx.fillRect(this.x - 5, this.y + 20, 10, 20);
     }
-    move(){
-        if (fishingRod.isDown) {
-            fishingRod.y += fishingRod.speed;
-        }
-        if (fishingRod.y >= canvas.height)
-            {
-                fishingRod.isDown = false;
-                fishingRod.y = 0;
-            }
+    
+
+    type() {
+        return "Hook";
     }
 
 }
@@ -33,15 +63,21 @@ class Hook extends Tool{
 class Spear extends Tool{
     draw(){
         ctx.fillStyle = 'red';
-        ctx.fillRect(this.x - 5, this.y + 20, 10, 20);
+        ctx.fillRect(this.x - 5, this.y + 20, 10, 100);
+    }
+
+    type() {
+        return "Spear";
     }
 
 }
 
-//VARS
-var fishes = [];
-let fishingRod = new Hook(canvas.width/2,0,5);
-fishCaught = 0;
+class FishStocks {
+    draw() {
+        
+    }
+}
+
 
 
 
@@ -93,14 +129,24 @@ class Fish {
         //Check for fishingRod Collision 
     }
     checkFish(){
+
+        //hitboxX = fishingRod.getSizeX();
+        //hitboxY = fishingRod.getSizeY();
+
         if (fishingRod.isDown) {
             //fishingRod.y += fishingRod.speed;
             if (fishingRod.y >= this.y) {
                 if (Math.abs(fishingRod.x - this.x) < 40 && Math.abs(fishingRod.y - this.y) < 20) {
-                    fishingRod.y = 0;
-                    fishingRod.isDown = false;
+                    //Reset Rod
+                    if (fishingRod.type() == "Hook"){
+                        fishingRod.y = 0;
+                        fishingRod.isDown = false;
+                    }
+                    //Update fishCaught
                     fishCaught += 1;
-                    document.getElementById("fishCaught").textContent = fishCaught;
+
+
+                    //Reset fish
                     this.x = -50;
                     this.y = (Math.random() * (canvas.height - 50)) + 50;
                 }
@@ -142,11 +188,20 @@ function draw() {
         fishingRod.draw();
         fishingRod.move();
 
+
+
+
     requestAnimationFrame(draw);
+
+
+    //update HTML
+    document.getElementById("fishCaught").textContent = fishCaught;
+    document.getElementById("profit").textContent = profit;
 }
 
 //GAME LOGIC
 
+let fishingRod = new Spear(canvas.width/2,0,5);
 blue = new School(5,'red');
 
 draw();
