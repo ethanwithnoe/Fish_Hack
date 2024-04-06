@@ -46,6 +46,10 @@ function updateFish() {
     }
 }
 
+function catchFish() {
+    return 
+}
+
 function draw() {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -84,7 +88,7 @@ function draw() {
             //ook.isDown = false;
             //hook.y = canvas.height;
             // Check if hook is close enough to the fish
-            if (Math.abs(hook.x - fish.x) < 20 && Math.abs(hook.y - fish.y) < 20) {
+            if (Math.abs(hook.x - fish.x) < 40 && Math.abs(hook.y - fish.y) < 20) {
                 hook.y = 0;
                 hook.isDown = false;
                 fishCount += 1;
