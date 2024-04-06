@@ -1,0 +1,6 @@
+spears
+    pierce through every fish
+net
+    catches a lot of fish
+fish eggs
+    hatches for bonus round
