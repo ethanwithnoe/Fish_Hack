@@ -8,6 +8,7 @@ const ctx = canvas.getContext('2d');
 
 fishCount = 0;
 
+//comit
 //hi
 //Example commit
 //Dog butter
@@ -57,7 +58,11 @@ function draw() {
     // Draw fish
     ctx.fillStyle = 'blue';
     ctx.beginPath();
-    ctx.arc(fish.x, fish.y, 10, 0, Math.PI * 2);
+    ctx.moveTo(fish.x, fish.y);
+    ctx.lineTo(fish.x-30, fish.y+12);
+    ctx.lineTo(fish.x-30, fish.y-12);
+    ctx.ellipse(fish.x, fish.y, 25, 15, 0, 0, Math.PI * 2);
+    //ctx.ellipse(fish.x, fish.y, 20, 10, 0, 0, Math.PI * 2);
     ctx.fill();
 
 
