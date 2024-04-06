@@ -9,6 +9,11 @@ const fish = {
     y: 100,
     speed: 50,
 };
+const dog = {
+    x: 100,
+    y: 100,
+    speed: 50,
+};
 
 // Define hook
 const hook = {
