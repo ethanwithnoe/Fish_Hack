@@ -10,6 +10,7 @@ class Tool {
     }  
 }
 
+
 class Hook extends Tool{
     draw(){
         ctx.fillStyle = 'red';
@@ -43,6 +44,7 @@ fishCaught = 0;
 
 
 
+
 //Define School
 class School {
     constructor(numFishes, color){
@@ -50,6 +52,7 @@ class School {
     for (let i = 0; i < numFishes; i++) {
         let fishX = Math.random() * canvas.width;
         let fishY = (Math.random() * (canvas.height-50) + 50);
+
         let fishSpeed = Math.random() * 2 + 1; // Random speed between 1 and 3
         fishes.push(new Fish(fishX, fishY, fishSpeed, color));
         }
@@ -85,6 +88,7 @@ class Fish {
             this.y = (Math.random() * (canvas.height - 50)) + 50;
         }
 
+
         //Check for fishingRod Collision 
     }
     checkFish(){
@@ -99,6 +103,7 @@ class Fish {
                     this.x = -50;
                     this.y = (Math.random() * (canvas.height - 50)) + 50;
                 }
+
             }
         }
     }
@@ -114,6 +119,8 @@ canvas.addEventListener('click', () => {
     }
 });
 
+
+
 function draw() {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -128,6 +135,7 @@ function draw() {
         fish.checkFish();
         
     });
+
     
     // Draw fishingRod
         fishingRod.draw();
@@ -138,6 +146,7 @@ function draw() {
     // if (fishingRod.isDown) {
     //     fishingRod.y += fishingRod.speed;
     // }
+
     requestAnimationFrame(draw);
 }
 
