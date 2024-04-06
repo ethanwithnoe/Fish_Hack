@@ -60,24 +60,13 @@ class School {
 }
 
 // Define fish
-
-
-const fish = {
-    x: 100,
-    y: 100,
-    speed: 2,
-};
-
-
-
-const School = [];
-
 class Fish {
-    constructor(x, y, speed) {
+    constructor(x, y, speed, color) {
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.caught = false;
+        this.color = color;
     }
 
     draw() {
@@ -161,6 +150,8 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
+//GAME LOGIC
 
+blue = new School(5,'red');
 
 draw();
