@@ -12,7 +12,6 @@ class Tool {
 
 
 
-
 class Hook extends Tool{
     draw(){
         ctx.fillStyle = 'red';
@@ -142,12 +141,6 @@ function draw() {
     // Draw fishingRod
         fishingRod.draw();
         fishingRod.move();
-    
-
-    // Move fishingRod
-    // if (fishingRod.isDown) {
-    //     fishingRod.y += fishingRod.speed;
-    // }
 
     requestAnimationFrame(draw);
 }
