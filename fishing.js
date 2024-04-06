@@ -1,5 +1,13 @@
+
+
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+
+
+//VARS
+
+fishCount = 0;
+
 //comit
 //hi
 //Example commit
@@ -11,9 +19,6 @@ const fish = {
     speed: 2,
 };
 
-canvas.width = 300;
-canvas.height = 500;
-
 
 // Define hook
 const hook = {
@@ -21,7 +26,7 @@ const hook = {
     y: 0,
     speed: 5,
     isDown: false,
-    
+
 };
 
 // Event listener for mouse click
@@ -32,9 +37,23 @@ canvas.addEventListener('click', () => {
     }
 });
 
+// Update fish position randomly
+function updateFish() {
+    fish.x += fish.speed;
+    if (fish.x > canvas.width + 10) {
+        fish.x = -10;
+        fish.y = (Math.random() * (canvas.height - 50)) + 50;
+    }
+}
+
 function draw() {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+
+    // Draw Water
+    ctx.fillStyle = 'rgb(159,212,253)';
+    ctx.fillRect(0, 50, canvas.width, canvas.height);
 
     // Draw fish
     ctx.fillStyle = 'blue';
@@ -45,6 +64,9 @@ function draw() {
     ctx.ellipse(fish.x, fish.y, 25, 15, 0, 0, Math.PI * 2);
     //ctx.ellipse(fish.x, fish.y, 20, 10, 0, 0, Math.PI * 2);
     ctx.fill();
+
+
+
 
     // Draw hook
     ctx.fillStyle = 'red';
@@ -63,24 +85,20 @@ function draw() {
             //hook.y = canvas.height;
             // Check if hook is close enough to the fish
             if (Math.abs(hook.x - fish.x) < 20 && Math.abs(hook.y - fish.y) < 20) {
-                alert('You caught a fish!');
                 hook.y = 0;
                 hook.isDown = false;
+                fishCount += 1;
+                fish.x = -10;
+                fish.y = (Math.random() * (canvas.height - 50)) + 50;
             }
         }
     }
-
+    
+    
     requestAnimationFrame(draw);
 }
 
-// Update fish position randomly
-function updateFish() {
-    fish.x += fish.speed;
-    if (fish.x > canvas.width + 10) {
-        fish.x = -10;
-        fish.y = Math.random() * canvas.height;
-    }
-}
+
 
 setInterval(updateFish, 15);
 
