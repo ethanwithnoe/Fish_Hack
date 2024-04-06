@@ -37,11 +37,11 @@ class Spear extends Tool{
 }
 
 //VARS
-fishCaught = document.getElementById("fishCaught");
 var fishes = [];
 let fishingRod = new Hook(canvas.width/2,0,5);
-fishCaught = "cheese";
-fishCount = 0;
+fishCaught = 0;
+
+
 
 //Define School
 class School {
@@ -94,7 +94,8 @@ class Fish {
                 if (Math.abs(fishingRod.x - this.x) < 40 && Math.abs(fishingRod.y - this.y) < 20) {
                     fishingRod.y = 0;
                     fishingRod.isDown = false;
-                    fishCount += 1;
+                    fishCaught += 1;
+                    document.getElementById("fishCaught").textContent = fishCaught;
                     this.x = -50;
                     this.y = (Math.random() * (canvas.height - 50)) + 50;
                 }
@@ -104,15 +105,6 @@ class Fish {
 }
 
 
-
-// Define fishingRod
-// const fishingRod = {
-//     x: canvas.width / 2,
-//     y: 0,
-//     speed: 5,
-//     isDown: false,
-
-// };
 
 // Event listener for mouse click
 canvas.addEventListener('click', () => {
