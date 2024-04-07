@@ -204,6 +204,11 @@ class Fish {
             ctx.lineTo(this.x-30, this.y-12);
             ctx.ellipse(this.x, this.y, 25, 15, 0, 0, Math.PI * 2);
             ctx.fill();
+            ctx.beginPath();
+            ctx.fillStyle = 'white';
+            ctx.ellipse(this.x+10, this.y-5, 3, 3, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
         }
     }
     updateFish() {
