@@ -15,10 +15,28 @@
     </style>
 </head>
 <body>
-    
+    <style>
+    .canvas-container {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+    canvas {
+        border: 1px solid black;
+    }
+    #stocks {
+        width: 500px;
+        height: 300px;
+    }
+</style>
+</head>
+<body>
+
+<div class="canvas-container">
     <canvas id="canvas" width="300" height="500"></canvas>
-    
     <canvas id="stocks" width="500" height="300"></canvas>
+</div>
+    
     
     <div class="button-container">
         <p> Accelerate Time:</p>
@@ -30,8 +48,6 @@
         <button id="DecFishBtn" type="button" onclick="DownUpdateCounter()"disabled>Decrease</button>
     </div>
 
-
-    <canvas id="ocean" width="500" height="300"></canvas>
     
     
     <h1> Lifetime fish caught: <span id="totalFishCaught"></span></h1>
@@ -51,7 +67,8 @@
     <p id="upgradeHookText" hidden> UPGRADE HOOK </p>
     <button id="upgradeHookBtn" type="button" onclick="upgradeHook()" hidden> Upgrade Hook </button>
 
-    <p> </p>
+    <p> HIRE FISHERMEN </p>
+    <button id="buyFishermenBtn" > HIRE FISHERMEN </button>
 
     <!--<script type="module" src="chart.js"></script>-->
     <script type="text/javascript" src="fishing.js"></script>
