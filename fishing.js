@@ -12,12 +12,9 @@ var fishes = [];
 //For HTML stuff
 fishCaught = 0;
 profit = 0.5 * fishCaught;
-startPrice = Math.random()*60
+startPrice = Math.random()*60;
 
 class Tool {
-
-    hitboxX = 20;
-    hitboxY = 20;
 
     constructor(x, y, speed){
         this.x = x;
@@ -49,9 +46,8 @@ class Tool {
 }
 
 class Hook extends Tool{
-
-
     
+
     draw(){
         ctx.fillStyle = 'red';
         ctx.fillRect(this.x - 5, this.y + 20, 10, 20);
@@ -65,9 +61,11 @@ class Hook extends Tool{
 }
 
 class Spear extends Tool{
+
+
     draw(){
-        ctx.fillStyle = 'red';
-        ctx.fillRect(this.x - 5, this.y + 20, 10, 100);
+        ctx.fillStyle = 'green';
+        ctx.fillRect(this.x - 5, this.y + 20, 10, 20);
     }
 
     type() {
@@ -76,45 +74,62 @@ class Spear extends Tool{
 
 }
 
+class FishEggs {}
+
 class FishStocks {
 
     //Create node with base price
-    nodes = [10];
-    generatePrice(){
-        volatility=10;
-        rnd = Math.Random(); // generate number, 0 <= x < 1.0
-        change_percent = 2;
-        if(change_percent < volatility){
-            change_percent -= (2 * volatility);
-            }
-        change_amount = old_price * change_percent;
-        new_price = old_price + change_amount;
-    
-        return new_price;
-    }
+    nodes = [];
 
-    constructor(numNodes,old_price) {
+    constructor(numNodes, basePrice) {
+        //nodes = [];
+        this.old_price = basePrice;
         this.numNodes = numNodes;
-        for (let i=0; i<numNodes; i++) {
-           generateNode(old_price);
-        }
+
+        this.generateNodes(basePrice);
+    }
+    
+    generatePrice(oldPrice){
+        //let volatility = 10;
+        let range = 100;
+        let rnd = Math.random(); // generate number, 0 <= x < 1.0
+        console.log(rnd);
+        
+        /*let changePercent = 2;
+        if(changePercent < volatility){
+            changePercent -= (2 * volatility);
+            }
+        let changeAmount = oldPrice * changePercent;
+        let newPrice = oldPrice + changeAmount;*/
+
+        let newPrice = rnd * range;
+
+    
+        return newPrice;
     }
 
-    generateNodes() {
-        for (let i = 0; i < this.numNodes; i++) {
-            nodes.push = this.generateNodes();
+    generateNodes(basePrice) {
+        console.log(this.nodes.length);
+        if (this.nodes.length == this.numNodes)
+            return "fart";
+        else
+        {
+            this.nodes.push(basePrice);
+            let newPrice = this.generatePrice(basePrice);
+            this.generateNodes(newPrice);
         }
+        
     }
     
     draw() {
-        generateNode(old_price);
-        shift(nodes);
-        for (let i = 0; i < this.numNodes; i++)
+        this.nodes.push(this.generatePrice(this.nodes[this.nodes.length]));
+        this.nodes.shift();
+        for (let i = 0; i < this.numNodes - 1; i++)
         {
             ctx2.fillStyle = 'blue';
             ctx2.beginPath();
-            ctx2.moveTo(0, stocks.height/2);
-            ctx2.lineTo(100, 100);
+            ctx2.moveTo(50 * i, this.nodes[i]);
+            ctx2.lineTo(50 * (i+1), this.nodes[i+1]);
             ctx2.stroke();
         }
         
@@ -175,7 +190,7 @@ class Fish {
         if (fishingRod.isDown) {
             //fishingRod.y += fishingRod.speed;
             if (fishingRod.y >= this.y) {
-                if (Math.abs(fishingRod.x - this.x) < 40 && Math.abs(fishingRod.y - this.y) < 20) {
+                if (Math.abs(fishingRod.x - this.x) < 40 && Math.abs(fishingRod.y - this.y) < 40) {
                     //Reset Rod
                     if (fishingRod.type() == "Hook"){
                         fishingRod.y = 0;
@@ -220,13 +235,13 @@ function draw() {
         
     });
 
-        fishStocks.draw();
+   fishStocks.draw();
         
     // Draw fishingRod
         fishingRod.draw();
         fishingRod.move();
 
-   //setInterval(updateStock(startPrice), 1000);
+   
 
 
     requestAnimationFrame(draw);
@@ -237,10 +252,14 @@ function draw() {
     document.getElementById("profit").textContent = profit;
 }
 
+
 //GAME LOGIC
 
 let fishingRod = new Spear(canvas.width/2,0,5);
-fishStocks = new FishStocks(3,60);
+fishStocks = new FishStocks(10,60);
 blue = new School(5,'red');
 
+//setInterval(fishStocks.draw, 100);
+
 draw();
+
