@@ -1,11 +1,9 @@
 const canvas = document.getElementById('canvas');
 const stocks = document.getElementById('stocks');
-const ocean = document.getElementById('ocean');
 
 
 const ctx = canvas.getContext('2d');
 const ctx2 = stocks.getContext('2d');
-const ctx3 = ocean.getContext('2d');
 
 
 
@@ -140,7 +138,7 @@ class FishStocks {
 
         //Update Prices
         priceOfFish = (Math.round(this.nodes[this.nodes.length-1] * 100)) / 100;
-        priceOfFishEggs = ((Math.round(this.nodes[this.nodes.length-1] * 100 * (totalFishCaught*0.5))) / 100) ;
+        priceOfFishEggs = ((Math.round(this.nodes[this.nodes.length-1] * 100 * (totalFishCaught*0.2))) / 100) ;
     }
     draw() {
         
@@ -213,7 +211,7 @@ class Fish {
             if (tools[i].isDown) {
                 //tools[i].y += tools[i].speed;
                 if (tools[i].y >= this.y) {
-                    if (Math.abs(tools[i].x - this.x) < 40 && Math.abs(tools[i].y - this.y) < 40) {
+                    if (Math.abs(tools[i].x - this.x) < 30 && Math.abs(tools[i].y - this.y) < 40) {
                         //Reset Rod
                         if (tools[i].type() == "Hook"){
                             tools[i].y = 0;
@@ -224,7 +222,7 @@ class Fish {
                         fishCaught += 1;
                         totalFishCaught += 1;
 
-
+                        delete this;
                         //Reset fish
                         this.x = -50;
                         this.y = (Math.random() * (canvas.height - 50)) + 50;
@@ -286,7 +284,6 @@ canvas.addEventListener('click', () => {
 
 });
 
-ocean.addEventListener
 
 
 function generatePrice(old_price){
@@ -385,7 +382,7 @@ function draw() {
     else
         document.getElementById("buyFishEggsBtn").disabled = false;
 
-    if (totalFishCaught >= 1 && tools[0].type() == "Hook") {
+    if (totalFishCaught >= 25 && tools[0].type() == "Hook") {
         document.getElementById("upgradeHookText").style.display = 'block';
         document.getElementById("upgradeHookBtn").style.display = 'block';
     }
