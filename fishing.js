@@ -1,8 +1,11 @@
 const canvas = document.getElementById('canvas');
 const stocks = document.getElementById('stocks');
+const ocean = document.getElementById('ocean');
 
-const ctx2 = stocks.getContext('2d');
+
 const ctx = canvas.getContext('2d');
+const ctx2 = stocks.getContext('2d');
+const ctx3 = stocks.getContext('2d');
 //import Chart from 'chart.js/auto';
 
 
@@ -13,10 +16,11 @@ var fishes = [];
 //For HTML stuff
 totalFishCaught = 0;
 fishCaught = 0;
-profit = 0.5 * fishCaught;
+profit = 0;
 badLuckCount = 0;
 whenToStock =0;
-startPrice = Math.random()*60;
+updateCounter =100
+
 
 class Tool {
 
@@ -87,7 +91,7 @@ class FishStocks {
     //Create node with base price
     nodes = [];
 
-    constructor(numNodes, basePrice) {
+    constructor(basePrice,numNodes) {
         //nodes = [];
         this.old_price = basePrice;
         this.numNodes = numNodes;
@@ -145,8 +149,8 @@ class FishStocks {
             //console.log(i);
             ctx2.fillStyle = 'blue';
             ctx2.beginPath(0,stocks.height/2);
-            ctx2.moveTo(50 * i, stocks.height-this.nodes[i]*20);
-            ctx2.lineTo(50 * (i+1), stocks.height-this.nodes[i+1]*20);
+            ctx2.moveTo(5 * i, stocks.height-this.nodes[i]*20);
+            ctx2.lineTo(5 * (i+1), stocks.height-this.nodes[i+1]*20);
             ctx2.stroke();
         }
         
@@ -238,7 +242,7 @@ function sellFish() {
 
 function buyFishEggs() {
     
-    profit -= 5;
+    profit -= 5.0;
     new School(5, 'green');
 }
 
@@ -273,6 +277,14 @@ function generatePrice(old_price){
     new_price = old_price + change_amount;
     return new_price;
 }
+function UpUpdateCounter(){
+    updateCounter-=0.5*updateCounter;
+    console.log(updateCounter)
+}
+function DownUpdateCounter(){
+    updateCounter+=0.5*updateCounter;
+    console.log(updateCounter)
+}
 
 function draw() {
     // Clear canvas
@@ -290,7 +302,7 @@ function draw() {
         
     });
 
-    if(whenToStock==100){
+    if(whenToStock>=updateCounter){
         fishStocks.updateStock()
         whenToStock=0;
     }
@@ -314,7 +326,16 @@ function draw() {
     document.getElementById("fishCaught").textContent = fishCaught;
     document.getElementById("profit").textContent = profit;
 
+    // Cannot set properties of null (setting 'disabled')
+    //when truing to limit accelrater
+    if (updateCounter >= 100)
+        document.getElementById("DecFishBtn").disabled = true;
+    else
+        document.getElementById("DecFishBtn").disabled = false;
+
     document.getElementById("totalFishCaught").textContent = totalFishCaught;
+
+
     //Check Butttons
     if (fishCaught == 0)
         document.getElementById("sellFishBtn").disabled = true;
@@ -338,7 +359,7 @@ function draw() {
 
 
 let fishingRod = new Hook(canvas.width/2,0,5);
-fishStocks = new FishStocks(10,20);
+fishStocks = new FishStocks(10,100);
 blue = new School(5,'red');
 
 //setInterval(fishStocks.draw, 100);

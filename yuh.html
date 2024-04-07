@@ -8,20 +8,36 @@
         canvas {
             border: 1px solid black;
         }
+        .button-container {
+            display: inline-block;
+            margin-right: 10px; /* Adjust as needed */
+        }
     </style>
 </head>
 <body>
+    
     <canvas id="canvas" width="300" height="500"></canvas>
+    
     <canvas id="stocks" width="500" height="300"></canvas>
     
+    <div class="button-container">
+        <p> Accelerate Time:</p>
+        <button id="AccTimeBtn" type="button" onclick="UpUpdateCounter()">Increase</button>
+    </div>
     
+    <div class="button-container">
+        <p> Decelerate Time:</p>
+        <button id="DecFishBtn" type="button" onclick="DownUpdateCounter()"disabled>Decrease</button>
+    </div>
 
     <h1> Lifetime fish caught: <span id="totalFishCaught"></span></h1>
     <hr>
     <h2> Fish Caught:  <span id="fishCaught"></span></h2>
     <h2> Profit: $ <span id="profit"><span></h2>
-    
     <hr>
+
+    
+    
 
     <p> SELL FISH - price of fish: <span id="priceOfFish">  </span></p>
     <button id="sellFishBtn" type="button" onclick="sellFish()" disabled> Sell Fish </button>
