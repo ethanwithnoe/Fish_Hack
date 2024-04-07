@@ -337,7 +337,7 @@ function draw() {
 //GAME LOGIC
 
 
-let fishingRod = new Spear(canvas.width/2,0,5);
+let fishingRod = new Hook(canvas.width/2,0,5);
 fishStocks = new FishStocks(10,20);
 blue = new School(5,'red');
 
