@@ -18,7 +18,7 @@ profit = 0;
 badLuckCount = 0;
 whenToStock = 0;
 updateCounter = 100;
-
+priceOfFishermen = 10;
 
 priceOfFish = 0;
 priceOfFishEggs = 0;
@@ -114,13 +114,17 @@ class Fishermen{
 
     constructor() {
         this.count = 0;
-        this.max = 6;
+        this.max = 7;
     }
     
 
     addFisherman() {
         this.count += 1;
+        if (this.count == 4)
+            this.count += 1;
         tools.push(new Hook( (this.count/8) * canvas.width, 0, 5) );
+        profit -= priceOfFishermen;
+        console.log("here");
     }
 
 }
@@ -267,22 +271,19 @@ function sellFish() {
 
 function buyFishEggs() {
     
-
     profit -= priceOfFishEggs;
     new School(5, 'green');
 }
 
 function upgradeHook() {
-
-    for (let i = 0; i < tools.length; i++)
-        tools[i] = new Spear(canvas.width/2,0,5);
-
-    document.getElementById("upgradeHookText").style.display = 'none';
-    document.getElementById("upgradeHookBtn").style.display = 'none';
-
-    men.addFisherman();
-    men.addFisherman();
-    men.addFisherman();
+    profit -= 10;
+    for (let i = 0; i < tools.length; i++) {
+        if (tools[i].type() != "Spear")
+        {
+            tools[i] = new Spear(tools[i].x,0,5);
+            break;
+        }
+    }
 }
 
 
@@ -336,7 +337,7 @@ function generatePrice(old_price){
 }
 function UpUpdateCounter(){
     updateCounter-=0.5*updateCounter;
-    console.log(updateCounter)
+    //console.log(updateCounter)
 }
 function DownUpdateCounter(){
     
@@ -345,7 +346,7 @@ function DownUpdateCounter(){
         updateCounter=100;
     }
 
-    console.log(updateCounter)
+    //console.log(updateCounter)
 }
 
 function draw() {
@@ -416,13 +417,35 @@ function draw() {
     else
         document.getElementById("buyFishEggsBtn").disabled = false;
 
-    if (totalFishCaught >= 1 && tools[0].type() == "Hook") {
-        document.getElementById("upgradeHookText").style.display = 'block';
-        document.getElementById("upgradeHookBtn").style.display = 'block';
+
+    for (let i = 0; i < tools.length; i++)
+    {
+        if ((profit > 10) && tools[i].type() == "Hook") {
+            document.getElementById("upgradeHookText").style.display = 'block';
+            document.getElementById("upgradeHookBtn").style.display = 'block';
+        }
+        else
+        {
+            document.getElementById("upgradeHookText").style.display = 'none';
+            document.getElementById("upgradeHookBtn").style.display = 'none';
+        }
+
     }
 
-}
+    if (profit > 10 && men.count < men.max)
+    {
+        document.getElementById("buyFishermenText").style.display = 'block';
+        document.getElementById("buyFishermenBtn").style.display = 'block';
+    }
+    else
+    {
+        document.getElementById("buyFishermenText").style.display = 'none';
+        document.getElementById("buyFishermenBtn").style.display = 'none';
+    }
 
+    
+
+}
 
 //GAME LOGIC
 
