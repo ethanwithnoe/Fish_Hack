@@ -9,7 +9,9 @@ const ctx = canvas.getContext('2d');
 //VARS
 var fishes = [];
 
+
 //For HTML stuff
+totalFishCaught = 0;
 fishCaught = 0;
 profit = 0.5 * fishCaught;
 badLuckCount = 0;
@@ -76,7 +78,9 @@ class Spear extends Tool{
 
 }
 
-class FishEggs {}
+class FishEggs {
+
+}
 
 class FishStocks {
 
@@ -209,8 +213,10 @@ class Fish {
                         fishingRod.y = 0;
                         fishingRod.isDown = false;
                     }
+
                     //Update fishCaught
                     fishCaught += 1;
+                    totalFishCaught += 1;
 
 
                     //Reset fish
@@ -222,6 +228,28 @@ class Fish {
         }
     }
 }
+
+//FOR HTML BUTTONS
+
+function sellFish() {
+    profit += fishCaught * 0.5;
+    fishCaught = 0;
+}
+
+function buyFishEggs() {
+    
+    profit -= 5;
+    new School(5, 'green');
+}
+
+function upgradeHook() {
+    fishingRod = new Spear(canvas.width/2,0,5);
+
+    document.getElementById("upgradeHookText").style.display = 'none';
+    document.getElementById("upgradeHookBtn").style.display = 'none';
+}
+
+//END FOR HTML BUTTONS
 
 // Event listener for mouse click
 canvas.addEventListener('click', () => {
@@ -285,17 +313,37 @@ function draw() {
     //update HTML
     document.getElementById("fishCaught").textContent = fishCaught;
     document.getElementById("profit").textContent = profit;
-    
+
+    document.getElementById("totalFishCaught").textContent = totalFishCaught;
+    //Check Butttons
+    if (fishCaught == 0)
+        document.getElementById("sellFishBtn").disabled = true;
+    else
+        document.getElementById("sellFishBtn").disabled = false;
+
+    if (profit < 5)
+        document.getElementById("buyFishEggsBtn").disabled = true;
+    else
+        document.getElementById("buyFishEggsBtn").disabled = false;
+
+    if (totalFishCaught >= 1 && fishingRod.type() == "Hook") {
+        document.getElementById("upgradeHookText").style.display = 'block';
+        document.getElementById("upgradeHookBtn").style.display = 'block';
+    }
+
 }
 
 
 //GAME LOGIC
+
 
 let fishingRod = new Spear(canvas.width/2,0,5);
 fishStocks = new FishStocks(10,20);
 blue = new School(5,'red');
 
 //setInterval(fishStocks.draw, 100);
+
+
 
 draw();
 
