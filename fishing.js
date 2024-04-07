@@ -309,7 +309,7 @@ canvas.addEventListener("mousemove", onMouseMove);
 function onMouseMove(event){
     PosX = event.clientX;
     if(!tools[0].isDown){
-        tools[0].x=PosX-25;
+        tools[0].x=PosX-canvas.getBoundingClientRect().left;
     }
     }
 
