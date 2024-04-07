@@ -12,6 +12,8 @@ var fishes = [];
 //For HTML stuff
 fishCaught = 0;
 profit = 0.5 * fishCaught;
+badLuckCount = 0;
+whenToStock =0;
 startPrice = Math.random()*60;
 
 class Tool {
@@ -88,27 +90,32 @@ class FishStocks {
 
         this.generateNodes(basePrice);
     }
-    
+    generateNodes(basePrice){
+       for(let i=0; i<this.numNodes; i++){
+            let newPrice = generatePrice(basePrice)
+            this.nodes.push(generatePrice(basePrice))
+            basePrice=newPrice;
+       }
+    }
+    /*
     generatePrice(oldPrice){
-        //let volatility = 10;
-        let range = 100;
+        let volatility = 10;
+        //let range = 100;
         let rnd = Math.random(); // generate number, 0 <= x < 1.0
         console.log(rnd);
-        
-        /*let changePercent = 2;
+        let changePercent = 0.02;
         if(changePercent < volatility){
             changePercent -= (2 * volatility);
             }
-        let changeAmount = oldPrice * changePercent;
-        let newPrice = oldPrice + changeAmount;*/
+        let changeAmount = rnd * oldPrice * changePercent;
+        let newPrice = oldPrice + changeAmount;
+        //let newPrice = rnd * range;
 
-        let newPrice = rnd * range;
-
-    
+        console.log(newPrice);
         return newPrice;
     }
 
-    generateNodes(basePrice) {
+    /*generateNodes(basePrice) {
         console.log(this.nodes.length);
         if (this.nodes.length == this.numNodes)
             return "fart";
@@ -119,17 +126,23 @@ class FishStocks {
             this.generateNodes(newPrice);
         }
         
-    }
-    
-    draw() {
-        this.nodes.push(this.generatePrice(this.nodes[this.nodes.length]));
+    }*/
+    updateStock(){
+        let lastPrice = this.nodes[this.nodes.length-1]
+        //console.log(this.nodes[this.nodes.length])
+        this.nodes.push(generatePrice(lastPrice));
+        console.log(generatePrice(lastPrice));
         this.nodes.shift();
+    }
+    draw() {
+        
         for (let i = 0; i < this.numNodes - 1; i++)
         {
+            //console.log(i);
             ctx2.fillStyle = 'blue';
-            ctx2.beginPath();
-            ctx2.moveTo(50 * i, this.nodes[i]);
-            ctx2.lineTo(50 * (i+1), this.nodes[i+1]);
+            ctx2.beginPath(0,stocks.height/2);
+            ctx2.moveTo(50 * i, stocks.height-this.nodes[i]*20);
+            ctx2.lineTo(50 * (i+1), stocks.height-this.nodes[i+1]*20);
             ctx2.stroke();
         }
         
@@ -218,6 +231,20 @@ canvas.addEventListener('click', () => {
     }
 });
 
+function generatePrice(old_price){
+    rnd = Math.random(); // generate number, 0 <= x < 1.0
+    volatility = 0.18;
+    change_percent = 2 * volatility * rnd;
+    if (change_percent > volatility  || old_price>= 15)
+        change_percent -= (2 * volatility);
+        badLuckCount++;
+    if(badLuckCount==100 || old_price<=3 ){
+        change_percent += (2 * volatility);
+    }
+    change_amount = old_price * change_percent;
+    new_price = old_price + change_amount;
+    return new_price;
+}
 
 function draw() {
     // Clear canvas
@@ -235,8 +262,15 @@ function draw() {
         
     });
 
-   fishStocks.draw();
-        
+    if(whenToStock==100){
+        fishStocks.updateStock()
+        whenToStock=0;
+    }
+    fishStocks.draw();
+
+    whenToStock++;
+    
+
     // Draw fishingRod
         fishingRod.draw();
         fishingRod.move();
@@ -246,17 +280,19 @@ function draw() {
 
     requestAnimationFrame(draw);
 
+    
 
     //update HTML
     document.getElementById("fishCaught").textContent = fishCaught;
     document.getElementById("profit").textContent = profit;
+    
 }
 
 
 //GAME LOGIC
 
 let fishingRod = new Spear(canvas.width/2,0,5);
-fishStocks = new FishStocks(10,60);
+fishStocks = new FishStocks(10,20);
 blue = new School(5,'red');
 
 //setInterval(fishStocks.draw, 100);
