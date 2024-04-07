@@ -195,8 +195,8 @@ class Fish {
     updateFish() {
         //Move Fish
         this.x += this.speed;
-        if (this.x > canvas.width + 10) {
-            this.x = -10;
+        if (this.x > canvas.width + 50) {
+            this.x = -50;
             this.y = (Math.random() * (canvas.height - 50)) + 50;
         }
 
