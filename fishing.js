@@ -46,6 +46,9 @@ class Tool {
         }
     }
 
+    setX(x) {
+        this.x=x;
+    }
     getHitboxX() {
         return this.hitboxX;
     }
@@ -61,8 +64,18 @@ class Hook extends Tool{
     
 
     draw(){
-        ctx.fillStyle = 'red';
-        ctx.fillRect(this.x - 5, this.y + 20, 10, 20);
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y+20);
+        ctx.bezierCurveTo(this.x, this.y, this.x, this.y+52, this.x+5, this.y+32);
+        ctx.stroke();
+
+        // Start and end points
+        ctx.fillStyle = "red";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y+15, 3, 0, 2 * Math.PI); // Start point
+        ctx.fill();
+
+        
     }
     
 
@@ -84,10 +97,13 @@ class Spear extends Tool{
 
 
     draw(){
-        ctx.fillStyle = 'green';
+        ctx.fillStyle = 'gold';
         ctx.fillRect(this.x - 5, this.y + 20, 10, 20)
+        ctx.beginPath();
+        ctx.arc(this.x, this.y+40, 5, 0, Math.PI * 1);
+        ctx.fillStyle = 'red';
+        ctx.fill();
     }
-
     type() {
         return "Spear";
     }
@@ -279,12 +295,25 @@ canvas.addEventListener('click', () => {
     }
 
     }
-
     
 
 });
 
+canvas.addEventListener("mousemove", onMouseMove);
+function onMouseMove(event){
+    PosX = event.clientX;
+    if(!tools[0].isDown){
+        tools[0].x=PosX-25;
+    }
+    }
 
+/*function printMousePos(event) {
+    document.body.textContent =
+      "clientX: " + event.clientX +
+      " - clientY: " + event.clientY;
+  }
+  
+canvas.addEventListener("click", printMousePos);*/
 
 function generatePrice(old_price){
     rnd = Math.random(); // generate number, 0 <= x < 1.0
@@ -382,7 +411,7 @@ function draw() {
     else
         document.getElementById("buyFishEggsBtn").disabled = false;
 
-    if (totalFishCaught >= 25 && tools[0].type() == "Hook") {
+    if (totalFishCaught >= 1 && tools[0].type() == "Hook") {
         document.getElementById("upgradeHookText").style.display = 'block';
         document.getElementById("upgradeHookBtn").style.display = 'block';
     }
