@@ -22,6 +22,11 @@ whenToStock = 0;
 updateCounter = 100;
 
 
+priceOfFish = 0;
+priceOfFishEggs = 0;
+
+tools = [];
+
 class Tool {
 
     constructor(x, y, speed){
@@ -49,9 +54,10 @@ class Tool {
 
     getHitboxY() {
         return this.hitboxY;
-    }
+    };
 
 }
+
 
 class Hook extends Tool{
     
@@ -66,6 +72,14 @@ class Hook extends Tool{
         return "Hook";
     }
 
+    getX() {
+        return this.x;
+    }
+
+    getY() {
+        return this.y;
+    }
+
 }
 
 class Spear extends Tool{
@@ -73,7 +87,7 @@ class Spear extends Tool{
 
     draw(){
         ctx.fillStyle = 'green';
-        ctx.fillRect(this.x - 5, this.y + 20, 10, 20);
+        ctx.fillRect(this.x - 5, this.y + 20, 10, 20)
     }
 
     type() {
@@ -82,7 +96,18 @@ class Spear extends Tool{
 
 }
 
-class FishEggs {
+class Fishermen{
+
+    constructor() {
+        this.count = 0;
+        this.max = 6;
+    }
+    
+
+    addFisherman() {
+        this.count += 1;
+        tools.push(new Hook( (this.count/8) * canvas.width, 0, 5) );
+    }
 
 }
 
@@ -91,7 +116,8 @@ class FishStocks {
     //Create node with base price
     nodes = [];
 
-    constructor(basePrice,numNodes) {
+
+    constructor(basePrice, numNodes) {
         //nodes = [];
         this.old_price = basePrice;
         this.numNodes = numNodes;
@@ -105,41 +131,16 @@ class FishStocks {
             basePrice=newPrice;
        }
     }
-    /*
-    generatePrice(oldPrice){
-        let volatility = 10;
-        //let range = 100;
-        let rnd = Math.random(); // generate number, 0 <= x < 1.0
-        console.log(rnd);
-        let changePercent = 0.02;
-        if(changePercent < volatility){
-            changePercent -= (2 * volatility);
-            }
-        let changeAmount = rnd * oldPrice * changePercent;
-        let newPrice = oldPrice + changeAmount;
-        //let newPrice = rnd * range;
-
-        console.log(newPrice);
-        return newPrice;
-    }
-
-    /*generateNodes(basePrice) {
-        console.log(this.nodes.length);
-        if (this.nodes.length == this.numNodes)
-            return "fart";
-        else
-        {
-            this.nodes.push(basePrice);
-            let newPrice = this.generatePrice(basePrice);
-            this.generateNodes(newPrice);
-        }
-        
-    }*/
+    
     updateStock(){
         let lastPrice = this.nodes[this.nodes.length-1]
         this.nodes.push(generatePrice(lastPrice));
         //console.log(generatePrice(lastPrice));
         this.nodes.shift();
+
+        //Update Prices
+        priceOfFish = (Math.round(this.nodes[this.nodes.length-1] * 100)) / 100;
+        priceOfFishEggs = ((Math.round(this.nodes[this.nodes.length-1] * 100 * (totalFishCaught*0.5))) / 100) ;
     }
     draw() {
         
@@ -200,66 +201,89 @@ class Fish {
         }
 
 
-        //Check for fishingRod Collision 
+        //Check for tools[i] Collision 
     }
+
     checkFish(){
 
-        //hitboxX = fishingRod.getSizeX();
-        //hitboxY = fishingRod.getSizeY();
+        //hitboxX = tools[i].getSizeX();
+        //hitboxY = tools[i].getSizeY();
 
-        if (fishingRod.isDown) {
-            //fishingRod.y += fishingRod.speed;
-            if (fishingRod.y >= this.y) {
-                if (Math.abs(fishingRod.x - this.x) < 40 && Math.abs(fishingRod.y - this.y) < 40) {
-                    //Reset Rod
-                    if (fishingRod.type() == "Hook"){
-                        fishingRod.y = 0;
-                        fishingRod.isDown = false;
+        for (let i = 0 ; i < tools.length; i++){
+            if (tools[i].isDown) {
+                //tools[i].y += tools[i].speed;
+                if (tools[i].y >= this.y) {
+                    if (Math.abs(tools[i].x - this.x) < 40 && Math.abs(tools[i].y - this.y) < 40) {
+                        //Reset Rod
+                        if (tools[i].type() == "Hook"){
+                            tools[i].y = 0;
+                            tools[i].isDown = false;
+                        }
+
+                        //Update fishCaught
+                        fishCaught += 1;
+                        totalFishCaught += 1;
+
+
+                        //Reset fish
+                        this.x = -50;
+                        this.y = (Math.random() * (canvas.height - 50)) + 50;
                     }
 
-                    //Update fishCaught
-                    fishCaught += 1;
-                    totalFishCaught += 1;
-
-
-                    //Reset fish
-                    this.x = -50;
-                    this.y = (Math.random() * (canvas.height - 50)) + 50;
                 }
-
             }
         }
     }
+
+
+
 }
 
-//FOR HTML BUTTONS
+//FOR HTML BUTTONS ------------------------------------------------------------------------------------
 
 function sellFish() {
-    profit += fishCaught * 0.5;
+    profit += fishCaught * priceOfFish;
     fishCaught = 0;
 }
 
 function buyFishEggs() {
     
-    profit -= 5.0;
+
+    profit -= priceOfFishEggs;
     new School(5, 'green');
 }
 
 function upgradeHook() {
-    fishingRod = new Spear(canvas.width/2,0,5);
+
+    for (let i = 0; i < tools.length; i++)
+        tools[i] = new Spear(canvas.width/2,0,5);
 
     document.getElementById("upgradeHookText").style.display = 'none';
     document.getElementById("upgradeHookBtn").style.display = 'none';
+
+    men.addFisherman();
+    men.addFisherman();
+    men.addFisherman();
 }
+
+
 
 //END FOR HTML BUTTONS
 
 // Event listener for mouse click
 canvas.addEventListener('click', () => {
-    if (!fishingRod.isDown) {
-        fishingRod.isDown = true;
-        fishingRod.y = 0;
+
+    for (let i = 0; i < tools.length; i++)
+    {
+        if (!tools[i].isDown) {
+        tools[i].isDown = true;
+        tools[i].y = 0;
     }
+
+    }
+
+    
+
 });
 
 ocean.addEventListener
@@ -318,9 +342,14 @@ function draw() {
     whenToStock++;
     
 
-    // Draw fishingRod
-        fishingRod.draw();
-        fishingRod.move();
+    // Draw tools
+
+    for (let i = 0; i < tools.length; i++)
+    {
+        tools[i].draw();
+        tools[i].move();
+    }
+        
 
    
 
@@ -331,7 +360,9 @@ function draw() {
 
     //update HTML
     document.getElementById("fishCaught").textContent = fishCaught;
-    document.getElementById("profit").textContent = profit;
+    document.getElementById("profit").textContent = Math.round(profit * 100) /100;
+    document.getElementById("priceOfFish").textContent = priceOfFish;
+    document.getElementById("priceOfFishEggs").textContent = priceOfFishEggs;
 
     // Cannot set properties of null (setting 'disabled')
     //when truing to limit accelrater
@@ -349,12 +380,12 @@ function draw() {
     else
         document.getElementById("sellFishBtn").disabled = false;
 
-    if (profit < 5)
+    if ((profit < priceOfFishEggs) || (totalFishCaught == 0))
         document.getElementById("buyFishEggsBtn").disabled = true;
     else
         document.getElementById("buyFishEggsBtn").disabled = false;
 
-    if (totalFishCaught >= 1 && fishingRod.type() == "Hook") {
+    if (totalFishCaught >= 1 && tools[0].type() == "Hook") {
         document.getElementById("upgradeHookText").style.display = 'block';
         document.getElementById("upgradeHookBtn").style.display = 'block';
     }
@@ -365,7 +396,8 @@ function draw() {
 //GAME LOGIC
 
 
-let fishingRod = new Hook(canvas.width/2,0,5);
+tools.push(new Hook(canvas.width/2,0,5));
+men = new Fishermen;
 fishStocks = new FishStocks(10,100);
 blue = new School(5,'red');
 
