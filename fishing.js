@@ -5,8 +5,8 @@ const ocean = document.getElementById('ocean');
 
 const ctx = canvas.getContext('2d');
 const ctx2 = stocks.getContext('2d');
-const ctx3 = stocks.getContext('2d');
-//import Chart from 'chart.js/auto';
+const ctx3 = ocean.getContext('2d');
+
 
 
 //VARS
@@ -18,8 +18,8 @@ totalFishCaught = 0;
 fishCaught = 0;
 profit = 0;
 badLuckCount = 0;
-whenToStock =0;
-updateCounter =100
+whenToStock = 0;
+updateCounter = 100;
 
 
 class Tool {
@@ -137,9 +137,8 @@ class FishStocks {
     }*/
     updateStock(){
         let lastPrice = this.nodes[this.nodes.length-1]
-        //console.log(this.nodes[this.nodes.length])
         this.nodes.push(generatePrice(lastPrice));
-        console.log(generatePrice(lastPrice));
+        //console.log(generatePrice(lastPrice));
         this.nodes.shift();
     }
     draw() {
@@ -263,6 +262,9 @@ canvas.addEventListener('click', () => {
     }
 });
 
+ocean.addEventListener
+
+
 function generatePrice(old_price){
     rnd = Math.random(); // generate number, 0 <= x < 1.0
     volatility = 0.18;
@@ -282,7 +284,12 @@ function UpUpdateCounter(){
     console.log(updateCounter)
 }
 function DownUpdateCounter(){
+    
     updateCounter+=0.5*updateCounter;
+    if(updateCounter>=100){
+        updateCounter=100;
+    }
+
     console.log(updateCounter)
 }
 
